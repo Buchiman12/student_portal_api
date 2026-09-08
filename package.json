@@ -2,5 +2,25 @@
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.9.5"
-  }
+  },
+  "name": "student_portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Buchiman12/student_portal_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Buchiman12/student_portal_api/issues"
+  },
+  "homepage": "https://github.com/Buchiman12/student_portal_api#readme"
 }
