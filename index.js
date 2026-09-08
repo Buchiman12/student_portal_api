@@ -25,4 +25,4 @@ app.use("/students", studentRoute)
 
 app.listen(port, () => {
     console.log(`Server RUNNING on port ${port}`)
-})
+});
