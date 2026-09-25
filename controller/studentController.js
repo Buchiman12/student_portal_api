@@ -1,13 +1,17 @@
-const studentModel = require("../model/studentModel.js");
+import { studentModel } from "../model/studentModel.js"
+import bcrypt from 'bcrypt';
 
 
 const createStudent = async (req, res) => {
     try {
-        const { name, registrationNumber, email } = req.body;
+        const { name, registrationNumber, email, password } = req.body;
+        const genSalt = await bcrypt.genSalt(10)
+        const hashPassword = await bcrypt.hash(password, genSalt)
         const student = await studentModel.create({
             name,
             registrationNumber,
-            email
+            email,
+            password : hashPassword
         })
         res.status(201).json({
             message: "Student account created successfully",
@@ -15,6 +19,22 @@ const createStudent = async (req, res) => {
         })
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body
+        const user = await studentModel.findOne({email})
+        if (!user) {
+           return res.status(404).json({message: "user not found, please sign up"})
+        }
+        const isMatch = await bcrypt.compare(password, user.password)
+        if(!isMatch){
+            return res.status(404).json({message: "password not correct"})
+        }
+        return res.status(200).json({message : "login successful", data: user})
+    }catch(error){
+        return res.status(500).json({message : error.message})
     }
 }
 
@@ -88,9 +108,31 @@ const deleteStudent = async (req, res) => {
     }
 }
 
-module.exports = { 
+const getAllStudent = async (req, res) => {
+    try {
+        const allStudent = await studentModel.find()
+        if(!allStudent){
+            return res.status(404).json({
+                message: "No student is registered"
+            })
+        }
+        res.status(200).json({
+            message: "all students successfully fetched",
+            Data: allStudent
+        })
+    }catch(error){
+        res.status(500).json({
+            message: `internal server error ${error.message}`
+        })
+        
+    }
+}
+
+export { 
     createStudent, 
     getSingleStudent, 
     updateStudent, 
-    deleteStudent 
+    deleteStudent,
+    getAllStudent,
+    loginUser
 };
